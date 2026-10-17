@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Liên hệ &amp; báo giá – StudyMate Slides</title>
+  <meta name="description" content="Form tạo sẵn bản brief để bạn sao chép và gửi qua Zalo hoặc email của StudyMate. Form chưa gửi dữ liệu đi đâu.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Bricolage+Grotesque:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="../css/site.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Crect width=%2724%27 height=%2724%27 rx=%275%27 fill=%27%232B6BFF%27/%3E%3Cpath d=%27M7 8h10M7 12h10M7 16h6%27 stroke=%27white%27 stroke-width=%272%27 stroke-linecap=%27round%27/%3E%3C/svg%3E">
+</head>
+<body data-root="../" data-page="lien-he">
+
+  <!-- Header: render bởi js/main.js (menu cấu hình trong js/config.js) -->
+  <div id="site-header"></div>
+
+  <main>
+    <section class="mini-hero">
+      <div class="container">
+        <h1>Điền brief, xem giá tạm tính</h1>
+        <p>Form tạo sẵn bản brief để bạn sao chép và gửi qua Zalo hoặc email của StudyMate. Form chưa gửi dữ liệu đi đâu.</p>
+      </div>
+    </section>
+
+    <section class="page-body">
+      <div class="container">
+        <div class="quote-grid">
+        <form id="f" novalidate="">
+        <div class="row">
+        <div class="field">
+        <label for="name">Tên bạn hoặc nhóm trưởng</label>
+        <input autocomplete="name" id="name" placeholder="VD: Nguyễn Văn A"/>
+        </div>
+        <div class="field">
+        <label for="contact">Zalo hoặc email</label>
+        <input id="contact" placeholder="VD: 0912345678"/>
+        </div>
+        </div>
+        <div class="row">
+        <div class="field">
+        <label for="plan">Gói</label>
+        <select id="plan">
+        <option value="basic">Basic – 199.000đ</option>
+        <option selected="" value="standard">Standard – 299.000đ</option>
+        <option value="premium">Premium – 449.000đ</option>
+        </select>
+        </div>
+        <div class="field">
+        <label for="slides">Số slide dự kiến</label>
+        <input id="slides" inputmode="numeric" max="200" min="1" type="number" value="15"/>
+        </div>
+        </div>
+        <div class="field">
+        <label for="deadline">Deadline</label>
+        <input id="deadline" type="datetime-local"/>
+        </div>
+        <label class="check" for="notes">
+        <input id="notes" type="checkbox"/>
+        <span>Cần speaker notes (tính thêm với Basic và Standard)</span>
+        </label>
+        <div class="field">
+        <label for="msg">Yêu cầu của giảng viên, môn học, ghi chú</label>
+        <textarea id="msg" placeholder="VD: Cần ít chữ, nhiều hình, màu xanh trắng theo logo trường..."></textarea>
+        </div>
+        <div aria-live="polite" class="est">
+        <span class="tot" id="tot">299.000đ</span>
+        <span id="dep"></span>
+        <span class="hint" id="hint"></span>
+        </div>
+        <div>
+        <button class="btn primary" type="submit">Tạo brief để gửi</button>
+        </div>
+        <div class="brief" hidden="" id="brief">
+        <pre id="out"></pre>
+        <div><button class="btn" id="copy" type="button">Sao chép brief</button></div>
+        <p class="muted" id="cmsg" style="font-size:.88rem">Gửi bản brief này qua Zalo hoặc email của StudyMate để được báo giá chính thức.</p>
+        </div>
+        </form>
+        <div class="side">
+        <div>
+        <h3>Liên hệ</h3>
+        <dl>
+        <dt>Zalo</dt><dd class="todo">0966450735</dd>
+        <dt>Email</dt><dd class="todo">luuhoangluc.03022021@gmail.com</dd>
+        <dt>Giờ hỗ trợ</dt><dd class="todo">8h-22h</dd>
+        </dl>
+        </div>
+        <div>
+        <h3>Nên gửi kèm</h3>
+        <ul>
+        <li>File nội dung (Word hoặc PDF)</li>
+        <li>Yêu cầu hoặc barem của giảng viên</li>
+        <li>Vài slide bạn thích làm mẫu</li>
+        </ul>
+        </div>
+        </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer: render bởi js/main.js -->
+  <div id="site-footer"></div>
+
+  <script src="../js/icons.js"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+(function () {
+  var native = document.querySelector('input[type="datetime-local"]');
+  if (!native) return;
+
+  var wrap = document.createElement('div');
+  wrap.className = 'dl-wrap';
+
+  var text = document.createElement('input');
+  text.type = 'text';
+  text.className = (native.className + ' dl-text').trim();
+  text.placeholder = 'VD: 17/07/2026 18:00';
+  text.inputMode = 'numeric';
+  text.autocomplete = 'off';
+  text.maxLength = 16;
+  if (native.required) { text.required = true; native.required = false; }
+
+  var btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'dl-btn';
+  btn.setAttribute('aria-label', 'Chọn ngày từ lịch');
+  btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
+
+  native.parentNode.insertBefore(wrap, native);
+  wrap.appendChild(text);
+  wrap.appendChild(btn);
+  wrap.appendChild(native);
+  native.tabIndex = -1;
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function mask(d) {
+    var s = '';
+    if (d.length > 0)  s += d.slice(0, 2);
+    if (d.length > 2)  s += '/' + d.slice(2, 4);
+    if (d.length > 4)  s += '/' + d.slice(4, 8);
+    if (d.length > 8)  s += ' ' + d.slice(8, 10);
+    if (d.length > 10) s += ':' + d.slice(10, 12);
+    return s;
+  }
+
+  function toISO(d) {
+    if (d.length !== 12) return '';
+    var dd = +d.slice(0, 2), mm = +d.slice(2, 4), yy = +d.slice(4, 8),
+        hh = +d.slice(8, 10), mi = +d.slice(10, 12);
+    var dt = new Date(yy, mm - 1, dd, hh, mi);
+    if (yy < 2000 || hh > 23 || mi > 59 ||
+        dt.getFullYear() !== yy || dt.getMonth() !== mm - 1 || dt.getDate() !== dd) return '';
+    return yy + '-' + pad(mm) + '-' + pad(dd) + 'T' + pad(hh) + ':' + pad(mi);
+  }
+
+  var fromText = false;
+
+  function push(value) {
+    fromText = true;
+    native.value = value;
+    native.dispatchEvent(new Event('input', { bubbles: true }));
+    native.dispatchEvent(new Event('change', { bubbles: true }));
+    fromText = false;
+  }
+
+  // Gõ tay -> tự chèn dấu / và : rồi đồng bộ sang ô gốc
+  text.addEventListener('input', function () {
+    var digits = text.value.replace(/\D/g, '').slice(0, 12);
+    var masked = mask(digits);
+    if (text.value !== masked) text.value = masked;
+    var iso = toISO(digits);
+    push(iso);
+    text.setCustomValidity(digits.length > 0 && !iso ? 'Nhập đủ theo dạng dd/mm/yyyy hh:mm' : '');
+    text.classList.toggle('is-invalid', digits.length === 12 && !iso);
+  });
+
+  // Chọn từ lịch -> đổ ngược về ô gõ tay
+  function fromCalendar() {
+    if (fromText || !native.value) return;
+    var m = native.value.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
+    if (!m) return;
+    text.value = m[3] + '/' + m[2] + '/' + m[1] + ' ' + m[4] + ':' + m[5];
+    text.setCustomValidity('');
+    text.classList.remove('is-invalid');
+  }
+  native.addEventListener('input', fromCalendar);
+  native.addEventListener('change', fromCalendar);
+
+  btn.addEventListener('click', function () {
+    if (native.showPicker) { try { native.showPicker(); return; } catch (e) {} }
+    native.focus();
+  });
+
+  // Bấm vào nhãn "Deadline" thì đưa con trỏ vào ô gõ tay
+  if (native.id) {
+    var label = document.querySelector('label[for="' + native.id + '"]');
+    if (label) label.addEventListener('click', function (e) { e.preventDefault(); text.focus(); });
+  }
+
+  fromCalendar();
+})();
+</script>
+</body>
+</html>
